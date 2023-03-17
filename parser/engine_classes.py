@@ -90,7 +90,7 @@ for i in range(1):
     hh = HH('python', i)
 
 for i in HHVacancy.all_vacancies:
-    print(i.__repr__)
+    print(i)
 print(HHVacancy.get_count_of_vacancy)
 
 # for i in range(1):

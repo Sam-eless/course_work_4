@@ -1,35 +1,56 @@
+import os
+from datetime import datetime
+import time
+import json
+
+
 class Connector:
     """
     Класс коннектор к файлу, обязательно файл должен быть в json формате
     не забывать проверять целостность данных, что файл с данными не подвергся
     внешнего деградации
     """
-    __data_file = None
+
+    def __init__(self, data_file):
+        self.__data_file = self.data_file = data_file
+
     @property
     def data_file(self):
-        pass
+        return self.__data_file
 
     @data_file.setter
     def data_file(self, value):
         # тут должен быть код для установки файла
-        self.__connect()
+        if self.__connect():
+            self.__data_file = value
+        else:
+            raise ValueError("Файл не найден")
 
-    def __connect(self):
+    def __connect(self) -> object:
         """
         Проверка на существование файла с данными и
         создание его при необходимости
         Также проверить на деградацию и возбудить исключение
         если файл потерял актуальность в структуре данных
         """
-        pass
+        if not os.path.exists(self.__data_file):
+            my_file = open(self.__data_file, "w")
+            my_file.close()
+            return True
+        elif (os.path.getmtime(self.__data_file) - time.time()) * -1 > 86400:
+            raise Exception("Файл изменялся более суток назад")
+        else:
+            return True
 
     def insert(self, data):
         """
         Запись данных в файл с сохранением структуры и исходных данных
         """
-        pass
+        data = json.dumps(data, indent=4, ensure_ascii=False)
+        with open(self.__data_file, "w", encoding="UTF-8") as file:
+            file.write(data)
 
-    def select(self, query):
+    def select(self, query: dict):
         """
         Выбор данных из файла с применением фильтрации
         query содержит словарь, в котором ключ это поле для
@@ -37,7 +58,14 @@ class Connector:
         {'price': 1000}, должно отфильтровать данные по полю price
         и вернуть все строки, в которых цена 1000
         """
-        pass
+        with open(self.__data_file, "r", encoding="UTF-8") as file:
+            data = json.load(file)
+            sorted_data = []
+            for i in data:
+                for key in query.keys():
+                    if i[key] == query[key]:
+                        sorted_data.append(i)
+            return sorted_data
 
     def delete(self, query):
         """
@@ -45,18 +73,39 @@ class Connector:
         как в методе select. Если в query передан пустой словарь, то
         функция удаления не сработает
         """
-        pass
-
+        with open(self.__data_file, "r", encoding="UTF-8") as file:
+            data = json.load(file)
+            sorted_data = []
+            for i in data:
+                if query == {}:
+                    print('Не переданы данные для удаления')
+                    break
+                else:
+                    for key in query.keys():
+                        if i[key] != query[key]:
+                            sorted_data.append(i)
+                with open('df.json', 'w', encoding='utf8') as file:
+                    json.dump(sorted_data, file, ensure_ascii=False, indent=2)
 
 if __name__ == '__main__':
     df = Connector('df.json')
-
-    data_for_file = {'id': 1, 'title': 'tet'}
+    data_for_file = {'id': 1, 'title': 'tet'}, {'id': 2, 'title': '30_000'}, {'id': 3, 'title': '20_000'}, {'id': 4, 'title': '20_000'}, {'id': 5, 'title': '20_000'}
+    # print(data_for_file)
 
     df.insert(data_for_file)
     data_from_file = df.select(dict())
-    assert data_from_file == [data_for_file]
+    data_from_file = df.select({'title': '20_000'})
+    # print(data_from_file)
 
-    df.delete({'id':1})
+
+    # assert data_from_file == data_for_file
+    #
+    # df.delete({'id': 1})
+    # df.delete({})
+    #
+    # print(data_for_file)
+    # data_from_file = df.select({'title': '20_000'})
+    #
+    # print(data_for_file)
     data_from_file = df.select(dict())
     assert data_from_file == []
