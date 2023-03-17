@@ -28,7 +28,7 @@ class CountMixin:
         return len(self.all_vacancies)
 
 
-class HHVacancy(Vacancy):  # add counter mixin
+class HHVacancy(CountMixin, Vacancy):  # add counter mixin
     """ HeadHunter Vacancy """
     all_vacancies = []
 
