@@ -14,7 +14,7 @@ class Vacancy:
         pass
 
     def __repr__(self):
-        return f'Vacancy({self.name}, {self.url_link}, {self.description}, {self.salary}'
+        return f'Vacancy("{self.name}", "{self.url_link}", "{self.description}", {self.salary})'
 
 
 class CountMixin:
@@ -24,8 +24,8 @@ class CountMixin:
 
     @classmethod
     @property
-    def get_count_of_vacancy(self):
-        return len(self.all_vacancies)
+    def get_count_of_vacancy(cls):
+        return len(cls.all_vacancies)
 
 
 class HHVacancy(CountMixin, Vacancy):  # add counter mixin
@@ -36,7 +36,7 @@ class HHVacancy(CountMixin, Vacancy):  # add counter mixin
         super().__init__(name, url_link, description, salary)
 
     def __str__(self):
-        return f'SJ: {self.name}, зарплата: {self.salary} руб/мес {self.url_link}'
+        return f'HH: {self.name}, зарплата: от {self.salary.get("from")} до {self.salary.get("to")} руб/мес {self.url_link}'
 
 
 class SJVacancy(CountMixin, Vacancy):  # add counter mixin
@@ -47,7 +47,7 @@ class SJVacancy(CountMixin, Vacancy):  # add counter mixin
         super().__init__(name, url_link, description, salary)
 
     def __str__(self):
-        return f'SJ: {self.name}, зарплата: {self.salary} руб/мес {self.url_link}'
+        return f'SJ: {self.name}, зарплата: {self.salary.get("from")} до {self.salary.get("to")} руб/мес {self.url_link}'
 
 
 def sorting(vacancies):
@@ -58,6 +58,3 @@ def sorting(vacancies):
 def get_top(vacancies, top_count):
     """ Должен возвращать {top_count} записей из вакансий по зарплате (iter, next magic methods) """
     pass
-#
-# sj = SuperJob("python")
-# print(SJVacancy.all_vacancies)
