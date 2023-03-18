@@ -1,18 +1,14 @@
 from operator import itemgetter, attrgetter, methodcaller
 
 
-
 class Vacancy:
-    # __slots__ = ...
+    __slots__ = ('name', 'url_link', 'description', 'salary')
 
     def __init__(self, name, url_link, description, salary):
         self.name = name
         self.url_link = url_link
         self.description = description
         self.salary = salary
-
-    def __str__(self):
-        pass
 
     def __repr__(self):
         return f'Vacancy("{self.name}", "{self.url_link}", "{self.description}", {self.salary})'
@@ -47,7 +43,10 @@ class Vacancy:
         except ValueError:
             print('Не экземпляр класса Vacancy')
 
+
 class CountMixin:
+    """Считает количество экземпляров класса,
+    равных количеству найденных вакансий"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -60,6 +59,8 @@ class CountMixin:
 
 class HHVacancy(CountMixin, Vacancy):  # add counter mixin
     """ HeadHunter Vacancy """
+    __slots__ = tuple()
+
     all_vacancies = []
 
     def __init__(self, name, url_link, description, salary):
@@ -69,11 +70,22 @@ class HHVacancy(CountMixin, Vacancy):  # add counter mixin
         if self.salary == {'from': 0, 'to': 0, 'currency': None}:
             return f'HH: {self.name}, зарплата: не указана {self.url_link}'
         else:
-            return f'HH: {self.name}, зарплата: от {self.salary.get("from")} до {self.salary.get("to")} {self.salary.get("currency")} {self.url_link}'
+            return f'HH: {self.name}, зарплата: от {self.salary.get("from")} до {self.salary.get("to")} {self.salary.get("currency")}, {self.url_link}'
+
+    def get_info_vacancy(self):
+        info = {
+            'source': 'HeadHunter',
+            'name': self.name,
+            'url': self.url_link,
+            'description': self.description,
+            'salary': f'от {self.salary.get("from")} до {self.salary.get("to")} {self.salary.get("currency")}'
+        }
+        return info
 
 
 class SJVacancy(CountMixin, Vacancy):  # add counter mixin
     """ SuperJob Vacancy """
+    __slots__ = tuple()
     all_vacancies = []
 
     def __init__(self, name, url_link, description, salary):
@@ -83,4 +95,16 @@ class SJVacancy(CountMixin, Vacancy):  # add counter mixin
         if self.salary == {'from': 0, 'to': 0}:
             return f'SJ: {self.name}, уровень з/п не указан {self.url_link}'
         else:
-            return f'SJ: {self.name}, зарплата: от {self.salary.get("from")} до {self.salary.get("to")} руб/мес {self.url_link}'
+            return f'SJ: {self.name}, зарплата: от {self.salary.get("from")} до {self.salary.get("to")} руб/мес, {self.url_link}'
+
+    def get_info_vacancy(self):
+        """Возвращает информацию о вакансии, которая хранится в
+        экземпляре класса, в формате пригодном для записи в JSON"""
+        info = {
+            'source': 'SuperJob',
+            'name': self.name,
+            'url': self.url_link,
+            'description': self.description,
+            'salary': f'от {self.salary.get("from")} до {self.salary.get("to")}'
+        }
+        return info

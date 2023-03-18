@@ -33,6 +33,8 @@ class HH(Engine):
                 self.url_link = data['items'][i]['apply_alternate_url']
                 self.description = data['items'][i]['snippet']['responsibility']
                 try:
+                    # Здесь можно сделать иначе, установить в salary только нижний порог з/п
+                    # и не выводить вакансии без нижнего порога з/п. Практиковался со словарями.
                     lower_threshold = data['items'][i]['salary']['from']
                     upper_threshold = data['items'][i]['salary']['to']
                     currency = data['items'][i]['salary']['currency']
@@ -52,6 +54,7 @@ class HH(Engine):
                 break
 
     def get_request(self):
+        """Возвращает результат поиска вакансий в API HeadHunter"""
         response = requests.get(f'https://api.hh.ru/vacancies?text={self.word}&per_page=10&page={self.page}&area=1')
         data = response.json()
         return data
@@ -88,10 +91,11 @@ class SuperJob(Engine):
                     self.salary = {'from': lower_threshold, 'to': upper_threshold}
                 SJVacancy.all_vacancies.append(SJVacancy(self.name, self.url_link, self.description, self.salary))
             except IndexError:
-                print("Больше вакансий не найдено.")
+                print(f'Найдено {SJVacancy.get_count_of_vacancy} вакансий по вашему запросу')
                 break
 
     def get_request(self):
+        """Возвращает результат поиска вакансий в API SuperJob"""
         # 'no_agreement':1 - Не показывать оклад «по договоренности» (установите параметр в 1).
         my_auth_data = {'X-Api-App-Id': os.environ['SUPERJOB_API_KEY']}
         response = requests.get('https://api.superjob.ru/2.0/vacancies/',
@@ -102,34 +106,33 @@ class SuperJob(Engine):
         return data
 
 
-for i in range(1):
-    hh = HH('python', i)
+# for i in range(1):
+#     hh = HH('python', i)
 
 # for i in HHVacancy.all_vacancies:
 #     print(i)
 # print(HHVacancy.get_count_of_vacancy)
-# # print(HHVacancy.all_vacancies)
 #
 # y = sorting(HHVacancy.all_vacancies, 'to')
-# # for i in y:
-# #     print(i)
+# for i in y:
+#     print(i)
 #
 # top = get_top(HHVacancy.all_vacancies, 2)
 # for i in top:
 #     print(i)
 
 #
-for i in range(1):
-    sj = SuperJob("python", i, 'Москва')
+# for i in range(1):
+#     sj = SuperJob("python", i, 'Москва')
 #
-# # for i in SJVacancy.all_vacancies:
-# #        print(i)
+# for i in SJVacancy.all_vacancies:
+#        print(i)
 #
 # print(SJVacancy.get_count_of_vacancy)
 # x = sorting(SJVacancy.all_vacancies, 'to')
 # for i in x:
 #     print(i)
 
-top = get_top(SJVacancy.all_vacancies, 2)
-for i in top:
-    print(i)
+# top = get_top(SJVacancy.all_vacancies, 2)
+# for i in top:
+#     print(i)
