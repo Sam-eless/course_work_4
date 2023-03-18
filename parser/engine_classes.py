@@ -1,4 +1,5 @@
-from classes import SJVacancy, HHVacancy, sorting, get_top
+from classes import SJVacancy, HHVacancy
+from utils import sorting, get_top
 import requests
 import json
 import os
@@ -129,6 +130,6 @@ for i in range(1):
 # for i in x:
 #     print(i)
 
-top = get_top(SJVacancy.all_vacancies, 123)
+top = get_top(SJVacancy.all_vacancies, 2)
 for i in top:
     print(i)
