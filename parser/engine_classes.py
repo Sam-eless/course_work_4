@@ -109,13 +109,11 @@ for i in HHVacancy.all_vacancies:
 print(HHVacancy.get_count_of_vacancy)
 # print(HHVacancy.all_vacancies)
 
-# print(sorting(HHVacancy.all_vacancies))
+y = sorting(HHVacancy.all_vacancies, 'to')
+for i in y:
+    print(i)
 
-
-
-
-
-
+#
 # for i in range(1):
 #     sj = SuperJob("python", i, 'Москва')
 #
@@ -126,4 +124,3 @@ print(HHVacancy.get_count_of_vacancy)
 # x = sorting(SJVacancy.all_vacancies, 'to')
 # for i in x:
 #     print(i)
-# #

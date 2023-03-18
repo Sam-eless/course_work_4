@@ -66,7 +66,7 @@ class HHVacancy(CountMixin, Vacancy):  # add counter mixin
         super().__init__(name, url_link, description, salary)
 
     def __str__(self):
-        if self.salary == {'from': 0, 'to': 0}:
+        if self.salary == {'from': 0, 'to': 0, 'currency': None}:
             return f'HH: {self.name}, зарплата: не указана {self.url_link}'
         else:
             return f'HH: {self.name}, зарплата: от {self.salary.get("from")} до {self.salary.get("to")} {self.salary.get("currency")} {self.url_link}'
