@@ -4,7 +4,6 @@ import requests
 import json
 import os
 from abc import ABC, abstractmethod
-from pprint import pprint
 
 
 class Engine(ABC):
@@ -22,7 +21,7 @@ class HH(Engine):
         self.word = word
         self.page = page
         data = self.get_request()
-        for i in range(10):
+        for i in range(20):
             try:
                 self.name = data['items'][i]['name']
                 self.url_link = data['items'][i]['apply_alternate_url']
@@ -53,7 +52,6 @@ class HH(Engine):
             except KeyError:
                 print('ой')
 
-
     def get_request(self) -> dict:
         """
         Возвращает результат поиска вакансий в API HeadHunter.
@@ -81,7 +79,8 @@ class SuperJob(Engine):
                     self.description = data['objects'][i]['vacancyRichText']
                     self.description = self.description.replace("<p>", "").replace("<b>", "").replace("</b>", ""). \
                         replace("</p>", "").replace("<br />", "").replace("<ul>", "").replace("<li>", "") \
-                        .replace("</li>", "").replace("</ul>", "").replace("• ", " -").replace("\n", " -")
+                        .replace("</li>", "").replace("</ul>", "").replace("• ", " -").replace("\n", " -"). \
+                        replace("<i>", "").replace("</i>", "")
                 except KeyError:
                     self.description = None
                 lower_threshold = data['objects'][i]['payment_from']
@@ -96,7 +95,6 @@ class SuperJob(Engine):
                     self.salary = {'from': lower_threshold, 'to': upper_threshold}
                 SJVacancy.all_vacancies.append(SJVacancy(self.name, self.url_link, self.description, self.salary))
             except IndexError:
-                # print(f'Найдено {SJVacancy.get_count_of_vacancy} вакансий по вашему запросу')
                 break
 
     def get_request(self) -> dict:
@@ -107,35 +105,20 @@ class SuperJob(Engine):
         # 'no_agreement':1 - Не показывать оклад «по договоренности» (установите параметр в 1).
         response = requests.get('https://api.superjob.ru/2.0/vacancies/',
                                 headers=my_auth_data,
-                                params={'keywords': {self.word}, 'page': {self.page}, 'count': 100, 'town': {self.town},
+                                params={'keywords': {self.word}, 'page': {self.page}, 'count': 20, 'town': {self.town},
                                         'order_field': 100000, 'no_agreement': 0})
         data = response.json()
         return data
 
 
-# for i in range(1):
-#     hh = HH('python', i)
-
-# for i in HHVacancy.all_vacancies:
-#     print(i)
-# print(HHVacancy.get_count_of_vacancy)
-#
-# y = sorting(HHVacancy.all_vacancies, 'to')
-# for i in y:
-#     print(i)
-#
-# top = get_top(HHVacancy.all_vacancies, 2)
-# for i in top:
-#     print(i)
-
 if __name__ == '__main__':
 
     for i in range(1):
         sj = SuperJob("python", i, 'Москва')
-
+    #
     for i in SJVacancy.all_vacancies:
         print(i)
-        # print(i.description)
+        print(i.description)
 
     #
     # print(SJVacancy.get_count_of_vacancy)
@@ -144,5 +127,20 @@ if __name__ == '__main__':
     #     print(i)
 
     # top = get_top(SJVacancy.all_vacancies, 2)
+    # for i in top:
+    #     print(i)
+
+    # for i in range(1):
+    #     hh = HH('python', i)
+
+    # for i in HHVacancy.all_vacancies:
+    #     print(i)
+    # print(HHVacancy.get_count_of_vacancy)
+    #
+    # y = sorting(HHVacancy.all_vacancies, 'to')
+    # for i in y:
+    #     print(i)
+    #
+    # top = get_top(HHVacancy.all_vacancies, 2)
     # for i in top:
     #     print(i)

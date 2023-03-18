@@ -36,18 +36,12 @@ def main():
             engine_class(search_word, i)
         else:
             engine_class(search_word, i, search_town)
-    for i in range(50, 100):
-        if engine_class == HH:
-            engine_class(search_word, i)
-        else:
-            engine_class(search_word, i, search_town)
     if vacancy_class.get_count_of_vacancy != 0:
         print(f'По вашему запросу найдено {vacancy_class.get_count_of_vacancy} вакансий с сайта {website}:')
 
-    print(vacancy_class.get_count_of_vacancy)
+    # По выбору пользователя записываем результат поиска в json файл с помощью класса Connector.
     is_insert = input(f'Желаете записать результат в файл {search_word.replace(" ", "_")}.json? \n')
     if is_insert.lower() == 'да':
-        # По выбору пользователя записываем результат поиска в json файл с помощью класса Connector.
         # Название файла состоит из названия класса и переданного запроса.
         search_result = Connector(f'{engine_class.__name__.lower()}_{search_word.replace(" ", "_")}.json')
         dict_vac = []
