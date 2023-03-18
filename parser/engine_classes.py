@@ -1,4 +1,4 @@
-from classes import SJVacancy, HHVacancy
+from classes import SJVacancy, HHVacancy, sorting
 import requests
 import json
 import os
@@ -66,7 +66,7 @@ class SuperJob(Engine):
                 self.url_link = data['objects'][i]['link']
                 try:
                     self.description = data['objects'][i]['client']['description']
-                except TypeError:
+                except KeyError:
                     self.description = None
                 self.salary = {'from': data['objects'][i]['payment_from'], 'to': data['objects'][i]['payment_to']}
                 SJVacancy.all_vacancies.append(SJVacancy(self.name, self.url_link, self.description, self.salary))
@@ -81,22 +81,34 @@ class SuperJob(Engine):
         response = requests.get('https://api.superjob.ru/2.0/vacancies/',
                                 headers=my_auth_data,
                                 params={'keywords': {self.word}, 'page': {self.page}, 'count': 20, 'town': {self.town},
-                                        'order_field': 100000, 'no_agreement': 0})
+                                        'order_field': 100000, 'no_agreement': 1})
         data = response.json()
         return data
 
 
-for i in range(1):
-    hh = HH('python', i)
-
-for i in HHVacancy.all_vacancies:
-    print(i)
-print(HHVacancy.get_count_of_vacancy)
-
 # for i in range(1):
-#     sj = SuperJob("python", i, 'Москва')
+#     hh = HH('python', i)
 #
+# # for i in HHVacancy.all_vacancies:
+# #     # print(i)
+# print(HHVacancy.get_count_of_vacancy)
+# print(HHVacancy.all_vacancies)
+#
+# print(sorting(HHVacancy.all_vacancies))
+#
+
+
+
+
+
+for i in range(1):
+    sj = SuperJob("python", i, 'Москва')
+
 # for i in SJVacancy.all_vacancies:
 #        print(i)
-#
-# print(SJVacancy.get_count_of_vacancy)
+
+print(SJVacancy.get_count_of_vacancy)
+x = sorting(SJVacancy.all_vacancies, 'to')
+for i in x:
+    print(i)
+

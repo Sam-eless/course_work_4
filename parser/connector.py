@@ -52,19 +52,22 @@ class Connector:
 
     def select(self, query: dict):
         """
-        Выбор данных из файла с применением фильтрации
-        query содержит словарь, в котором ключ это поле для
-        фильтрации, а значение это искомое значение, например:
+        Выбор данных из файла с применением фильтрации.
+        Query содержит словарь в котором ключ это поле для фильтрации,
+        а значение это искомое значение. Например:
         {'price': 1000}, должно отфильтровать данные по полю price
         и вернуть все строки, в которых цена 1000
         """
         with open(self.__data_file, "r", encoding="UTF-8") as file:
             data = json.load(file)
             sorted_data = []
-            for i in data:
-                for key in query.keys():
-                    if i[key] == query[key]:
-                        sorted_data.append(i)
+            try:
+                for i in data:
+                    for key in query.keys():
+                        if i[key] == query[key]:
+                            sorted_data.append(i)
+            except KeyError:
+                print("Нет данных по указанному ключу")
             return sorted_data
 
     def delete(self, query):
@@ -84,19 +87,20 @@ class Connector:
                     for key in query.keys():
                         if i[key] != query[key]:
                             sorted_data.append(i)
-                with open('df.json', 'w', encoding='utf8') as file:
-                    json.dump(sorted_data, file, ensure_ascii=False, indent=2)
+                with open('df.json', 'w', encoding='utf8') as outfile:
+                    json.dump(sorted_data, outfile, ensure_ascii=False, indent=2)
+
 
 if __name__ == '__main__':
     df = Connector('df.json')
-    data_for_file = {'id': 1, 'title': 'tet'}, {'id': 2, 'title': '30_000'}, {'id': 3, 'title': '20_000'}, {'id': 4, 'title': '20_000'}, {'id': 5, 'title': '20_000'}
+    data_for_file = {'id': 1, 'title': 'tet'}, {'id': 2, 'title': '30_000'},\
+                    {'id': 3, 'title': '20_000'}, {'id': 4, 'title': '20_000'}, {'id': 5, 'title': '20_000'}
     # print(data_for_file)
 
     df.insert(data_for_file)
-    data_from_file = df.select(dict())
+    # data_from_file = df.select(dict())
     data_from_file = df.select({'title': '20_000'})
     # print(data_from_file)
-
 
     # assert data_from_file == data_for_file
     #
@@ -107,5 +111,5 @@ if __name__ == '__main__':
     # data_from_file = df.select({'title': '20_000'})
     #
     # print(data_for_file)
-    data_from_file = df.select(dict())
-    assert data_from_file == []
+    # data_from_file = df.select(dict())
+    # assert data_from_file == []

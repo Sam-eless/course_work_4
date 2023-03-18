@@ -1,4 +1,5 @@
-# from parser.engine_classes import SuperJob
+from operator import itemgetter, attrgetter, methodcaller
+
 
 
 class Vacancy:
@@ -16,6 +17,35 @@ class Vacancy:
     def __repr__(self):
         return f'Vacancy("{self.name}", "{self.url_link}", "{self.description}", {self.salary})'
 
+    def __ge__(self, other):
+        try:
+            if isinstance(other, Vacancy):
+                return self.salary.get('to') >= other.salary.get('to')
+        except ValueError:
+            print('Не экземпляр класса Vacancy')
+
+    def __gt__(self, other):
+        try:
+            if isinstance(other, Vacancy):
+                return self.salary.get('to') > other.salary.get('to')
+        except ValueError:
+            print('Не экземпляр класса Vacancy')
+
+    def __lt__(self, other):
+        try:
+            if isinstance(other, Vacancy):
+                return self.salary.get('to') < other.salary.get('to')
+        except ValueError:
+            print('Не экземпляр класса Vacancy')
+        except TypeError:
+            print('ОШИБКА')
+
+    def __le__(self, other):
+        try:
+            if isinstance(other, Vacancy):
+                return self.salary.get('to') <= other.salary.get('to')
+        except ValueError:
+            print('Не экземпляр класса Vacancy')
 
 class CountMixin:
 
@@ -50,9 +80,13 @@ class SJVacancy(CountMixin, Vacancy):  # add counter mixin
         return f'SJ: {self.name}, зарплата: {self.salary.get("from")} до {self.salary.get("to")} руб/мес {self.url_link}'
 
 
-def sorting(vacancies):
+def sorting(vacancies: list, level="to"):
     """ Должен сортировать любой список вакансий по ежемесячной оплате (gt, lt magic methods) """
-    pass
+    sort_list_vacancy = sorted(vacancies, key=lambda vacancy: vacancy.salary.get(level))
+    # sort_list_vacancy = sorted(vacancies)
+
+    return sort_list_vacancy
+
 
 
 def get_top(vacancies, top_count):
