@@ -1,4 +1,4 @@
-from classes import SJVacancy, HHVacancy, sorting
+from classes import SJVacancy, HHVacancy, sorting, get_top
 import requests
 import json
 import os
@@ -104,18 +104,22 @@ class SuperJob(Engine):
 for i in range(1):
     hh = HH('python', i)
 
-for i in HHVacancy.all_vacancies:
-    print(i)
-print(HHVacancy.get_count_of_vacancy)
-# print(HHVacancy.all_vacancies)
-
-y = sorting(HHVacancy.all_vacancies, 'to')
-for i in y:
-    print(i)
+# for i in HHVacancy.all_vacancies:
+#     print(i)
+# print(HHVacancy.get_count_of_vacancy)
+# # print(HHVacancy.all_vacancies)
+#
+# y = sorting(HHVacancy.all_vacancies, 'to')
+# # for i in y:
+# #     print(i)
+#
+# top = get_top(HHVacancy.all_vacancies, 2)
+# for i in top:
+#     print(i)
 
 #
-# for i in range(1):
-#     sj = SuperJob("python", i, 'Москва')
+for i in range(1):
+    sj = SuperJob("python", i, 'Москва')
 #
 # # for i in SJVacancy.all_vacancies:
 # #        print(i)
@@ -124,3 +128,7 @@ for i in y:
 # x = sorting(SJVacancy.all_vacancies, 'to')
 # for i in x:
 #     print(i)
+
+top = get_top(SJVacancy.all_vacancies, 123)
+for i in top:
+    print(i)

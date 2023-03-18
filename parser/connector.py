@@ -95,11 +95,11 @@ if __name__ == '__main__':
     df = Connector('df.json')
     data_for_file = {'id': 1, 'title': 'tet'}, {'id': 2, 'title': '30_000'},\
                     {'id': 3, 'title': '20_000'}, {'id': 4, 'title': '20_000'}, {'id': 5, 'title': '20_000'}
-    # print(data_for_file)
+    print(data_for_file)
 
     df.insert(data_for_file)
     # data_from_file = df.select(dict())
-    data_from_file = df.select({'title': '20_000'})
+    # data_from_file = df.select({'title': '20_000'})
     # print(data_from_file)
 
     # assert data_from_file == data_for_file
