@@ -13,13 +13,13 @@ def main():
     search_town = None
 
     # Пользователь выбирает агрегатор для поиска вакансий, HeadHunter или SuperJob.
-    user_choice = int(input('Для поиска через HeadHunter введи - 1.\nДля поиска через SuperJob введи - 2. \n'))
+    user_choice = input('Для поиска через HeadHunter введи - 1.\nДля поиска через SuperJob введи - 2. \n')
     # Устанавливаем значения переменных в соответствии с выбранным агрегатором
-    if user_choice == 1:
+    if user_choice == "1":
         vacancy_class = HHVacancy
         engine_class = HH
         website = "www.hh.ru"
-    elif user_choice == 2:
+    elif user_choice == "2":
         vacancy_class = SJVacancy
         engine_class = SuperJob
         website = "www.superjob.ru"
