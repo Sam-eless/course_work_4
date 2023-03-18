@@ -66,7 +66,10 @@ class HHVacancy(CountMixin, Vacancy):  # add counter mixin
         super().__init__(name, url_link, description, salary)
 
     def __str__(self):
-        return f'HH: {self.name}, зарплата: от {self.salary.get("from")} до {self.salary.get("to")} руб/мес {self.url_link}'
+        if self.salary == {'from': 0, 'to': 0}:
+            return f'HH: {self.name}, зарплата: не указана {self.url_link}'
+        else:
+            return f'HH: {self.name}, зарплата: от {self.salary.get("from")} до {self.salary.get("to")} {self.salary.get("currency")} {self.url_link}'
 
 
 class SJVacancy(CountMixin, Vacancy):  # add counter mixin
@@ -77,10 +80,13 @@ class SJVacancy(CountMixin, Vacancy):  # add counter mixin
         super().__init__(name, url_link, description, salary)
 
     def __str__(self):
-        return f'SJ: {self.name}, зарплата: {self.salary.get("from")} до {self.salary.get("to")} руб/мес {self.url_link}'
+        if self.salary == {'from': 0, 'to': 0}:
+            return f'SJ: {self.name}, уровень з/п не указан {self.url_link}'
+        else:
+            return f'SJ: {self.name}, зарплата: от {self.salary.get("from")} до {self.salary.get("to")} руб/мес {self.url_link}'
 
 
-def sorting(vacancies: list, level="to"):
+def sorting(vacancies: list, level="from"):
     """ Должен сортировать любой список вакансий по ежемесячной оплате (gt, lt magic methods) """
     sort_list_vacancy = sorted(vacancies, key=lambda vacancy: vacancy.salary.get(level))
     # sort_list_vacancy = sorted(vacancies)
