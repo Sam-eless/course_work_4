@@ -5,25 +5,29 @@ import json
 
 
 class Connector:
-    """ Класс коннектор к файлу """
+    """
+    Класс коннектор к файлу
+    """
 
-    def __init__(self, data_file):
+    def __init__(self, data_file: str) -> None:
         self.__data_file = self.data_file = data_file
 
     @property
-    def data_file(self):
+    def data_file(self) -> str:
         return self.__data_file
 
     @data_file.setter
-    def data_file(self, value):
+    def data_file(self, value: str) -> None:
         if self.__connect():
             self.__data_file = value
         else:
             raise ValueError("Файл не найден")
 
-    def __connect(self) -> object:
-        """ Проверка на существование файла с данными и создание его при необходимости.
-        Проверка актуальности файла, если создан больше суток назад - вызывается исключение. """
+    def __connect(self) -> bool:
+        """
+        Проверка на существование файла с данными и создание его при необходимости.
+        Проверка актуальности файла, если создан больше суток назад - вызывается исключение.
+        """
         if not os.path.exists(self.__data_file):
             my_file = open(self.__data_file, "w")
             my_file.close()
@@ -33,13 +37,15 @@ class Connector:
         else:
             return True
 
-    def insert(self, data):
-        """ Запись данных в файл с сохранением структуры и исходных данных """
+    def insert(self, data: list) -> None:
+        """
+        Запись данных в файл с сохранением структуры и исходных данных.
+        """
         data = json.dumps(data, indent=4, ensure_ascii=False)
         with open(self.__data_file, "w", encoding="UTF-8") as file:
             file.write(data)
 
-    def select(self, query: dict):
+    def select(self, query: dict) -> list:
         """
         Выбор данных из файла с применением фильтрации.
         Query содержит словарь в котором ключ это поле для фильтрации,
@@ -59,7 +65,7 @@ class Connector:
                 print("Нет данных по указанному ключу")
             return sorted_data
 
-    def delete(self, query):
+    def delete(self, query: dict) -> None:
         """
         Удаление записей из файла, которые соответствуют запросу.
         Если в query передан пустой словарь, то функция удаления не сработает
@@ -81,21 +87,20 @@ class Connector:
 
 if __name__ == '__main__':
     df = Connector('df.json')
-    data_for_file = {'id': 1, 'title': 'test'}#, {'id': 2, 'title': '30_000'},\
-                    #{'id': 3, 'title': '20_000'}, {'id': 4, 'title': '20_000'}, {'id': 5, 'title': '20_000'}
+    data_for_file = {'id': 1, 'title': 'test'}, {'id': 2, 'title': '30_000'}, {'id': 3, 'title': '20_000'}, {'id': 4, 'title': '20_000'}, {'id': 5, 'title': '20_000'}
     print(data_for_file)
 
     df.insert(data_for_file)
-    data_from_file = df.select(dict())
+    data_from_file = df.select({'id': 1})
     print(data_from_file)
-
+    df.delete({'id': 1})
 
     # assert data_from_file == data_for_file
 
     #
-    print(data_for_file)
-    data_from_file = df.select({'title': '20_000'})
+    # print(data_for_file)
+    # data_from_file = df.select({'title': '20_000'})
     #
-    print(data_for_file)
+    # print(data_for_file)
     # data_from_file = df.select(dict())
     # assert data_from_file == []

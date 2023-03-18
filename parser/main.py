@@ -1,5 +1,5 @@
-# This is a sample Python script.
-from engine_classes import HH, SuperJob
+from engine_classes import HH
+from engine_classes import SuperJob
 from classes import SJVacancy, HHVacancy
 from utils import sorting, get_top
 from connector import Connector
@@ -10,6 +10,7 @@ def main():
     search_result = None
     website = None
     engine_class = None
+    search_town = None
 
     # Пользователь выбирает агрегатор для поиска вакансий, HeadHunter или SuperJob.
     user_choice = int(input('Для поиска через HeadHunter введи - 1.\nДля поиска через SuperJob введи - 2. \n'))
@@ -22,21 +23,28 @@ def main():
         vacancy_class = SJVacancy
         engine_class = SuperJob
         website = "www.superjob.ru"
+        search_town = input('Введите город для поиска \n')
     else:
         quit("Bye!")
 
     # Выполняем поиск вакансий по заданной должности.
     # Результат поиска записывается в атрибут класса в виде списка экземпляров.
     search_word = input('Введите должность для поиска \n')
-    for i in range(1):
+    print("Идет поиск...")
+    for i in range(50):
         if engine_class == HH:
             engine_class(search_word, i)
         else:
-            search_town = input('Введите город для поиска \n')
             engine_class(search_word, i, search_town)
-        if vacancy_class.get_count_of_vacancy > 0:
-            print(f'По вашему запросу найдено {vacancy_class.get_count_of_vacancy} вакансий с сайта {website}:')
+    for i in range(50, 100):
+        if engine_class == HH:
+            engine_class(search_word, i)
+        else:
+            engine_class(search_word, i, search_town)
+    if vacancy_class.get_count_of_vacancy != 0:
+        print(f'По вашему запросу найдено {vacancy_class.get_count_of_vacancy} вакансий с сайта {website}:')
 
+    print(vacancy_class.get_count_of_vacancy)
     is_insert = input(f'Желаете записать результат в файл {search_word.replace(" ", "_")}.json? \n')
     if is_insert.lower() == 'да':
         # По выбору пользователя записываем результат поиска в json файл с помощью класса Connector.
