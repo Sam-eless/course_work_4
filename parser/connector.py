@@ -58,8 +58,9 @@ class Connector:
             sorted_data = []
             try:
                 for i in data:
+                    # if isinstance(i[key], str):
                     for key in query.keys():
-                        if i[key] == query[key]:
+                        if query[key] in i[key]:
                             sorted_data.append(i)
             except KeyError:
                 print("Нет данных по указанному ключу")
@@ -83,24 +84,3 @@ class Connector:
                             sorted_data.append(i)
                 with open(self.__data_file, 'w', encoding='utf8') as outfile:
                     json.dump(sorted_data, outfile, ensure_ascii=False, indent=2)
-
-
-if __name__ == '__main__':
-    df = Connector('df.json')
-    data_for_file = {'id': 1, 'title': 'test'}, {'id': 2, 'title': '30_000'}, {'id': 3, 'title': '20_000'}, {'id': 4, 'title': '20_000'}, {'id': 5, 'title': '20_000'}
-    print(data_for_file)
-
-    df.insert(data_for_file)
-    data_from_file = df.select({'id': 1})
-    print(data_from_file)
-    df.delete({'id': 1})
-
-    # assert data_from_file == data_for_file
-
-    #
-    # print(data_for_file)
-    # data_from_file = df.select({'title': '20_000'})
-    #
-    # print(data_for_file)
-    # data_from_file = df.select(dict())
-    # assert data_from_file == []

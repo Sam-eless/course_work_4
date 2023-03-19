@@ -109,38 +109,3 @@ class SuperJob(Engine):
                                         'order_field': 100000, 'no_agreement': 0})
         data = response.json()
         return data
-
-
-if __name__ == '__main__':
-
-    for i in range(1):
-        sj = SuperJob("python", i, 'Москва')
-    #
-    for i in SJVacancy.all_vacancies:
-        print(i)
-        print(i.description)
-
-    #
-    # print(SJVacancy.get_count_of_vacancy)
-    # x = sorting(SJVacancy.all_vacancies, 'to')
-    # for i in x:
-    #     print(i)
-
-    # top = get_top(SJVacancy.all_vacancies, 2)
-    # for i in top:
-    #     print(i)
-
-    # for i in range(1):
-    #     hh = HH('python', i)
-
-    # for i in HHVacancy.all_vacancies:
-    #     print(i)
-    # print(HHVacancy.get_count_of_vacancy)
-    #
-    # y = sorting(HHVacancy.all_vacancies, 'to')
-    # for i in y:
-    #     print(i)
-    #
-    # top = get_top(HHVacancy.all_vacancies, 2)
-    # for i in top:
-    #     print(i)
