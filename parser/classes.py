@@ -1,6 +1,3 @@
-from operator import itemgetter, attrgetter, methodcaller
-
-
 class Vacancy:
     __slots__ = ('name', 'url_link', 'description', 'salary')
 
@@ -72,7 +69,8 @@ class HHVacancy(CountMixin, Vacancy):  # add counter mixin
         if self.salary == {'from': 0, 'to': 0, 'currency': None}:
             return f'HH: {self.name}, зарплата: не указана {self.url_link}'
         else:
-            return f'HH: {self.name}, зарплата: от {self.salary.get("from")} до {self.salary.get("to")} {self.salary.get("currency")}, {self.url_link}'
+            return f'HH: {self.name}, зарплата: от {self.salary.get("from")} до {self.salary.get("to")} ' \
+                   f'{self.salary.get("currency")}, {self.url_link}'
 
     def get_info_vacancy(self) -> dict:
         info = {
@@ -97,7 +95,8 @@ class SJVacancy(CountMixin, Vacancy):  # add counter mixin
         if self.salary == {'from': 0, 'to': 0}:
             return f'SJ: {self.name}, уровень з/п не указан {self.url_link}'
         else:
-            return f'SJ: {self.name}, зарплата: от {self.salary.get("from")} до {self.salary.get("to")} руб/мес, {self.url_link}'
+            return f'SJ: {self.name}, зарплата: от {self.salary.get("from")}' \
+                   f' до {self.salary.get("to")} руб/мес, {self.url_link}'
 
     def get_info_vacancy(self) -> dict:
         """

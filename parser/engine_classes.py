@@ -26,12 +26,9 @@ class HH(Engine):
                 self.name = data['items'][i]['name']
                 self.url_link = data['items'][i]['apply_alternate_url']
                 self.description = data['items'][i]['snippet']['responsibility']
-                # print(type(self.description))
                 if isinstance(self.description, str):
                     self.description = self.description.replace("<highlighttext>", "").replace("</highlighttext>", "")
                 try:
-                    # Здесь можно сделать иначе, установить в salary только нижний порог з/п
-                    # и не выводить вакансии без нижнего порога з/п. Практиковался со словарями.
                     lower_threshold = data['items'][i]['salary']['from']
                     upper_threshold = data['items'][i]['salary']['to']
                     currency = data['items'][i]['salary']['currency']
