@@ -88,17 +88,10 @@ def main():
 
             # Выбор данных из файла с применением фильтрации по зарплате.
             if user_filter == "зарплата":
-                salary_from = input('Введите нижнюю границу ')
-                if salary_from == "":
-                    salary_from = 0
-                salary_to = input('Введите верхнюю границу ')
-                if salary_to == "":
-                    salary_to = 0
-                if vacancy_class == HHVacancy:
-                    salary_from_to = f'от {salary_from} до {salary_to} RUR'
-                else:
-                    salary_from_to = f'от {salary_from} до {salary_to} RUR'
-                select_salary = search_result.select({"salary": salary_from_to})
+                salary_search = input('Введите уровень з/п ')
+                if salary_search == "":
+                    salary_search = 0
+                select_salary = search_result.select({"salary": salary_search})
                 if len(select_salary) == 0:
                     print('По данному запросу вакансий не найдено')
                 else:
